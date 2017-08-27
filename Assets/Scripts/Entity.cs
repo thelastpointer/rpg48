@@ -6,6 +6,10 @@ namespace RPG
 {
     public class Entity : MonoBehaviour
     {
+        public int Strength = 10;
+        public int Dexterity = 10;
+        public int Willpower = 10;
+
         public Faction Faction = Faction.Monster;
         public bool Indestructible = false;
         public float MaxHealth = 1;

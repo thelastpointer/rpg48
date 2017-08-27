@@ -11,13 +11,17 @@ namespace RPG
         WeaponData data;
         float distanceMoved;
         int passThrough;
+        DamageFunction damageFunction;
 
-        public void Initialize(Vector3 position, Vector3 direction, WeaponData data, Entity attacker)
+        public delegate void DamageFunction(Entity target, Entity attacker);
+
+        public void Initialize(Vector3 position, Vector3 direction, WeaponInstance parentWeapon, Entity attacker, DamageFunction func)
         {
             tr.position = position;
             tr.rotation = Quaternion.LookRotation(direction);
 
-            this.data = data;
+            damageFunction = func;
+            data = parentWeapon.Data;
             owner = attacker;
             passThrough = 0;
         }
@@ -44,7 +48,7 @@ namespace RPG
             {
                 // TODO: Impact effects
 
-                e.OnDamage(data.Damage, owner);
+                damageFunction.Invoke(e, owner);
 
                 ++passThrough;
                 if (passThrough >= data.ProjectilePassThrough)

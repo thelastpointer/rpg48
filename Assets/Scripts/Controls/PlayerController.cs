@@ -28,11 +28,14 @@ namespace RPG
         //unlocked spells
         //selected spell
 
+        [Header("DEBUG STUFF")]
         public WeaponInstance Weapon;
         
         private Transform tr;
         private CharacterController controller;
         private Vector3 move;
+
+        private WeaponInstance selectedSpell;
 
         void Awake()
         {

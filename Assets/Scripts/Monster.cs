@@ -52,7 +52,7 @@ namespace RPG
                 // Attack
                 else
                 {
-                    bool attacking = Weapon.CanFire();
+                    //bool attacking = Weapon.CanFire();
 
                     if (Weapon.CanFire())
                     {

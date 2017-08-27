@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG
 {
     [System.Serializable]
-    public class WeaponInstance
+    public class WeaponInstance : CooldownAbility
     {
         public WeaponData Data;
 
@@ -13,46 +14,43 @@ namespace RPG
         private List<Entity> entities = new List<Entity>();
         private Collider[] hitResults = new Collider[20];
 
-        public float GetCooldownPercent()
+        protected override float Cooldown()
         {
-            return Mathf.Clamp01((Time.time - lastShoot) / Data.Cooldown);
+            return Data.Cooldown;
         }
 
-        public bool CanFire()
+        protected override void FireInternal(Vector3 casterPosition, Vector3 attackDirection, Entity attacker)
         {
-            return ((Time.time - lastShoot) > Data.Cooldown);
-        }
-
-        public bool Fire(Vector3 position, Vector3 direction, Entity attacker)
-        {
-            UnityEngine.Assertions.Assert.IsNotNull(Data, "Weapon data is null");
-
-            if ((Time.time - lastShoot) > Data.Cooldown)
+            switch (Data.Type)
             {
-                // TODO: Effects and anim and shit
-                lastShoot = Time.time;
-
-                switch (Data.Type)
-                {
-                    case WeaponType.Melee:
-                        MeleeAttack(position, direction, attacker);
-                        break;
-                    case WeaponType.Projectile:
-                        ProjectileAttack(position, direction, attacker);
-                        break;
-                    case WeaponType.Raycast:
-                        RaycastAttack(position, direction, attacker);
-                        break;
-                    default:
-                        break;
-                }
-
-                return true;
+                case WeaponType.Melee:
+                    MeleeAttack(casterPosition, attackDirection, attacker);
+                    break;
+                case WeaponType.Projectile:
+                    ProjectileAttack(casterPosition, attackDirection, attacker);
+                    break;
+                case WeaponType.Raycast:
+                    RaycastAttack(casterPosition, attackDirection, attacker);
+                    break;
+                default:
+                    break;
             }
-
-            return false;
         }
+        
+        private void DoDamage(Entity target, Entity attacker)
+        {
+            // Melee, magic, ranged
+            float baseDamage = Data.Damage;
 
+            if (Data.Type == WeaponType.Melee)
+                baseDamage *= 1f;
+            else if (Data.Type == WeaponType.Projectile)
+                baseDamage *= 1f;
+            //...
+            
+            target.OnDamage(Data.Damage, attacker);
+        }
+        
         private void MeleeAttack(Vector3 position, Vector3 direction, Entity attacker)
         {
             // Resolve cone
@@ -60,14 +58,14 @@ namespace RPG
 
             // Damage every entity
             foreach (Entity e in targets)
-                e.OnDamage(Data.Damage, attacker);
+                DoDamage(e, attacker);
         }
 
         private void ProjectileAttack(Vector3 position, Vector3 direction, Entity attacker)
         {
             // Create projectile
             Projectile projectile = GameObject.Instantiate(Data.Projectile);
-            projectile.Initialize(position, direction, Data, attacker);
+            projectile.Initialize(position, direction, this, attacker, DoDamage);
         }
 
         private void RaycastAttack(Vector3 position, Vector3 direction, Entity attacker)
@@ -77,7 +75,7 @@ namespace RPG
 
             // Damage every entity
             foreach (Entity e in targets)
-                e.OnDamage(Data.Damage, attacker);
+                DoDamage(e, attacker);
         }
 
         private Entity[] ResolveCone(Vector3 position, Vector3 direction, Faction attacker)
