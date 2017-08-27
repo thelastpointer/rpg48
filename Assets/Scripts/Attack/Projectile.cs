@@ -32,6 +32,7 @@ namespace RPG
         }
 
         // TODO: It would be faster if a 'projectile manager' managed all updates. This could get slow
+        // Addendum: I don't give a fuck
         void Update()
         {
             distanceMoved += data.ProjectileSpeed * Time.deltaTime;
