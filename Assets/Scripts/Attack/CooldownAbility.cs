@@ -12,6 +12,12 @@ namespace RPG
 
         public float GetCooldownPercent()
         {
+            float cd = Cooldown();
+
+            // Special case for continous raycasts
+            if (cd <= 0)
+                return 1f;
+
             return Mathf.Clamp01((Time.time - lastShoot) / Cooldown());
         }
 

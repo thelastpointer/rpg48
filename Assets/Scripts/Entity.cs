@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPG
 {
@@ -8,7 +6,9 @@ namespace RPG
     {
         public int Strength = 10;
         public int Dexterity = 10;
-        public int Willpower = 10;
+        public int Constitution = 10;
+        public int Spellpower = 10;
+        public int Intelligence = 10;
 
         public Faction Faction = Faction.Monster;
         public bool Indestructible = false;
@@ -16,11 +16,16 @@ namespace RPG
         public float Health = 1;
         public GameObject[] DeathPrefabs;
 
+        protected virtual float AdjustIncomingDamage(float baseDamage)
+        {
+            return baseDamage;
+        }
+
         public virtual void OnDamage(float damage, Entity attacker)
         {
             if (!Indestructible)
             {
-                Health -= damage;
+                Health -= AdjustIncomingDamage(damage);
                 if (Health <= 0)
                     Die();
             }

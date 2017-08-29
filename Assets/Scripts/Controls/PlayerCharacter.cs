@@ -8,7 +8,7 @@ using UnityEngine;
 namespace RPG
 {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerController : Entity
+    public class PlayerCharacter : Entity
     {
         [Header("Movement properties")]
         public float MovementSpeed = 5f;
@@ -36,6 +36,14 @@ namespace RPG
         private Vector3 move;
 
         private WeaponInstance selectedSpell;
+
+        protected override float AdjustIncomingDamage(float baseDamage)
+        {
+            // DR
+            // Percentile
+
+            return base.AdjustIncomingDamage(baseDamage);
+        }
 
         void Awake()
         {

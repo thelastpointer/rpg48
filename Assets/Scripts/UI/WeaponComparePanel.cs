@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using RPG.Inventory;
+
 namespace RPG.UI
 {
     public class WeaponComparePanel : MonoBehaviour

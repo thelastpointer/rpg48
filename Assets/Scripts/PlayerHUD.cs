@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using RPG.UI;
+using RPG.Inventory;
 
 namespace RPG
 {
     public class PlayerHUD : MonoBehaviour
     {
-        public PlayerController Player;
+        public PlayerCharacter Player;
 
         [Header("Health")]
         public Slider Healthbar;
@@ -83,8 +84,9 @@ namespace RPG
                 pickupPromptDisplayed = pickupPrompts[0];
                 pickupPrompts.RemoveAt(0);
 
-                if (pickupPromptDisplayed.Weapon != null)
-                    ShowWeaponComparison(pickupPromptDisplayed.Weapon);
+                WeaponData weapon = pickupPromptDisplayed.Item as WeaponData;
+                if (weapon != null)
+                    ShowWeaponComparison(weapon);
             }
         }
 
@@ -105,15 +107,16 @@ namespace RPG
         {
             HideComparison();
 
-            if (pickupPromptDisplayed.Weapon != null)
+            WeaponData weapon = pickupPromptDisplayed.Item as WeaponData;
+            if (weapon != null)
             {
                 WeaponData tmp = Player.Weapon.Data;
 
                 // TODO: Also change mesh!
-                Player.Weapon.Data = pickupPromptDisplayed.Weapon;
+                Player.Weapon.Data = weapon;
 
                 // TODO: Also change mesh!
-                pickupPromptDisplayed.Weapon = tmp;
+                weapon = tmp;
             }
         }
         public void CancelPickup()

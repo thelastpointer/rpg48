@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using RPG.Inventory;
+
 namespace RPG
 {
     [System.Serializable]
@@ -39,16 +41,20 @@ namespace RPG
         
         private void DoDamage(Entity target, Entity attacker)
         {
-            // Melee, magic, ranged
-            float baseDamage = Data.Damage;
+            float adjustedDamage = Data.Damage;
 
-            if (Data.Type == WeaponType.Melee)
-                baseDamage *= 1f;
-            else if (Data.Type == WeaponType.Projectile)
-                baseDamage *= 1f;
-            //...
+            if (Data.IsSpell)
+                adjustedDamage *= attacker.Spellpower;
+            else
+            {
+                if (Data.Type == WeaponType.Melee)
+                    adjustedDamage *= ((float)attacker.Strength / 10f);
+                //else if (Data.Type == WeaponType.Projectile)
+                //    baseDamage *= 1f;
+                //...
+            }
             
-            target.OnDamage(Data.Damage, attacker);
+            target.OnDamage(adjustedDamage, attacker);
         }
         
         private void MeleeAttack(Vector3 position, Vector3 direction, Entity attacker)

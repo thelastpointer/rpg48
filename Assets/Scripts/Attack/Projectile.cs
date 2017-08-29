@@ -8,7 +8,7 @@ namespace RPG
     {
         Transform tr;
         Entity owner;
-        WeaponData data;
+        Inventory.WeaponData data;
         float distanceMoved;
         int passThrough;
         DamageFunction damageFunction;

@@ -1,26 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using RPG.Inventory;
 
 namespace RPG
 {
     public class Pickup : MonoBehaviour
     {
-        public WeaponData Weapon;
+        public Item Item;
+
+        //public WeaponData Weapon;
         // Armor
         // Mask
         // Spell scroll
 
         void OnTriggerEnter(Collider other)
         {
-            PlayerController player = other.GetComponent<PlayerController>();
+            PlayerCharacter player = other.GetComponent<PlayerCharacter>();
             if (player != null)
                 player.HUD.DisplayPrompt(this);
         }
 
         void OnTriggerExit(Collider other)
         {
-            PlayerController player = other.GetComponent<PlayerController>();
+            PlayerCharacter player = other.GetComponent<PlayerCharacter>();
             if (player != null)
                 player.HUD.RemovePrompt(this);
         }

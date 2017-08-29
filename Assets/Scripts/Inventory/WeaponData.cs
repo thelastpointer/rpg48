@@ -1,15 +1,10 @@
 ﻿using UnityEngine;
 
-namespace RPG
+namespace RPG.Inventory
 {
     [CreateAssetMenu(fileName = "weapon.asset", menuName = "RPG/Weapon data")]
-    public class WeaponData : ScriptableObject
+    public class WeaponData : Item
     {
-        [Header("Description")]
-        public string Name;
-        [Multiline]
-        public string Description;
-
         // TODO: Graphics
         // TODO: Type (one or two-handed)
         // TODO: Hit effects and stuff
@@ -17,6 +12,7 @@ namespace RPG
         [Header("Shared data")]
         public float Damage;
         public float Cooldown;
+        public bool IsSpell = false;
 
         public WeaponType Type = WeaponType.Melee;
         
@@ -34,6 +30,8 @@ namespace RPG
         public float RaycastRange;
         public GameObject RaycastEffect;
         public int RaycastPassThrough = 1;
+        public bool ContinousRaycast = false;
+        public float RaycastDuration;
 
         public float GetRange()
         {
