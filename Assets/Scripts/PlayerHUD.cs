@@ -41,7 +41,8 @@ namespace RPG
             HealthText.text = string.Format("{0}/{1}", Player.Health.ToString("0"), Player.MaxHealth.ToString("0"));
 
             // Cooldowns
-            WeaponCooldown.fillAmount = 1f - Player.Weapon.GetCooldownPercent();
+            if (Player.Weapon != null)
+                WeaponCooldown.fillAmount = 1f - Player.Weapon.GetCooldownPercent();
 
             // Displaying prompt
             if ((pickupPrompts.Count > 0) && (pickupPromptDisplayed == null))
@@ -116,7 +117,7 @@ namespace RPG
                 Player.Weapon.Data = weapon;
 
                 // TODO: Also change mesh!
-                weapon = tmp;
+                pickupPromptDisplayed.Item = tmp;
             }
         }
         public void CancelPickup()

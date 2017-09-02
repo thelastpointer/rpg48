@@ -25,7 +25,7 @@ namespace RPG
         {
             return ((Time.time - lastShoot) > Cooldown());
         }
-
+        
         public bool Fire(Vector3 casterPosition, Vector3 attackDirection, Entity caster)
         {
             if ((Time.time - lastShoot) > Cooldown())

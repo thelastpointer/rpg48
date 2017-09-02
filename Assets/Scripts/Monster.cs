@@ -14,10 +14,12 @@ namespace RPG
     [RequireComponent(typeof(CharacterController))]
     public class Monster : Entity
     {
-        public WeaponInstance Weapon;
+        public CooldownAbility Weapon;
         public float Speed = 2;
         public Animator Anim;
         public float AttackAnimDelay;
+        public float MinAttackRange = 0;
+        public float MaxAttackRange = 2;
 
         Transform tr;
         CharacterController controller;
@@ -44,7 +46,7 @@ namespace RPG
                 tr.rotation = Quaternion.LookRotation(diff);
 
                 // Move towards target
-                if (dst > Weapon.Data.GetRange())
+                if (dst > MaxAttackRange)
                 {
                     controller.Move((diff.normalized * Speed) * Time.deltaTime);
                     moving = true;

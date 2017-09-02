@@ -21,20 +21,19 @@ namespace RPG
 
         [Header("Inventory")]
         //public ArmorItem Armor;
-        //public WeaponItem Weapon;
+        public Inventory.WeaponData DefaultWeapon;
         //public Item Artifact;
 
         // Spellbook
         //unlocked spells
         //selected spell
 
-        [Header("DEBUG STUFF")]
-        public WeaponInstance Weapon;
-        
+        public WeaponInstance Weapon { get { return weaponInstance; } }
+
         private Transform tr;
         private CharacterController controller;
         private Vector3 move;
-
+        private WeaponInstance weaponInstance;
         private WeaponInstance selectedSpell;
 
         protected override float AdjustIncomingDamage(float baseDamage)
@@ -49,6 +48,9 @@ namespace RPG
         {
             tr = GetComponent<Transform>();
             controller = GetComponent<CharacterController>();
+
+            weaponInstance = GetComponentInChildren<WeaponInstance>();
+            weaponInstance.Data = DefaultWeapon;
         }
 
         void Update()
@@ -56,8 +58,11 @@ namespace RPG
             Controls.Update(tr.position, MovementSpeed, 0);
             move = Controls.GetMovement().normalized * MovementSpeed;
 
-            if (Controls.Attack1())
-                Weapon.Fire(tr.position, Controls.GetDirection(), this);
+            if (weaponInstance != null)
+            {
+                if (Controls.Attack1())
+                    weaponInstance.Fire(tr.position, Controls.GetDirection(), this);
+            }
 
             if (Input.GetKeyDown(KeyCode.F))
                 HUD.OpenItemPrompt();

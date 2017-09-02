@@ -7,12 +7,10 @@ using RPG.Inventory;
 
 namespace RPG
 {
-    [System.Serializable]
     public class WeaponInstance : CooldownAbility
     {
         public WeaponData Data;
 
-        private float lastShoot;
         private List<Entity> entities = new List<Entity>();
         private Collider[] hitResults = new Collider[20];
 
