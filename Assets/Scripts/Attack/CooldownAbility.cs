@@ -3,7 +3,7 @@
 namespace RPG
 {
     [System.Serializable]
-    public abstract class CooldownAbility : MonoBehaviour
+    public abstract class CooldownAbility
     {
         private float lastShoot;
 

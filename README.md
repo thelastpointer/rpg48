@@ -4,7 +4,7 @@ I'm making a game in 48 hours. This is the repo for it. You can find more info o
 
 ### Setup ###
 
-I used Unity 5.5.0f3. Check out the repo and open it with Unity. Should work with newer (and some older) versions, but no promises.
+I used Unity **2017.1.0f3**. Check out the repo and open it with Unity. Should work with newer (and some older) versions, but no promises.
 
 ### Contact ###
 

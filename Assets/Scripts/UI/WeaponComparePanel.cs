@@ -9,7 +9,7 @@ namespace RPG.UI
 {
     public class WeaponComparePanel : MonoBehaviour
     {
-        public Text TitleLabel;
+        public Text TitleLabel1, TitleLabel2;
         public Text DamageLabel1, DamageLabel2;
         public Text SpeedLabel1, SpeedLabel2;
         public Text RangeLabel1, RangeLabel2;
@@ -17,7 +17,9 @@ namespace RPG.UI
 
         public void SetItems(WeaponData newWeapon, WeaponData oldWeapon)
         {
-            TitleLabel.text = newWeapon.Name;
+            // Title
+            TitleLabel1.text = newWeapon.Name;
+            TitleLabel2.text = oldWeapon.Name;
 
             // Damage
             DamageLabel1.text = newWeapon.Damage.ToString();
