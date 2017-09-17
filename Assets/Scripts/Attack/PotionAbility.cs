@@ -19,7 +19,9 @@ namespace RPG
             if (Data != null)
             {
                 attacker.AddHealth(Data.HealthAdd);
+                attacker.AddHealthPercent(Data.HealthPercent);
                 attacker.AddMana(Data.ManaAdd);
+                attacker.AddManaPercent(Data.ManaPercent);
             }
         }
     }

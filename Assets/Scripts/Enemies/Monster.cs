@@ -99,6 +99,13 @@ namespace RPG
                 TrySetTarget(attacker);
         }
 
+        protected override void Die()
+        {
+            Game.Instance.OnMonsterKilled(this);
+
+            base.Die();
+        }
+
         void TrySetTarget(Entity e)
         {
             if (target == null)

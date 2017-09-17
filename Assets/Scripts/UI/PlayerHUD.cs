@@ -16,20 +16,31 @@ namespace RPG
         public Slider Healthbar;
         public Text HealthText;
 
-        [Header("Weapon")]
+        [Header("Ability bar")]
         public Image WeaponImage;
         public Image WeaponCooldown;
+        public Image PotionImage;
+        public Image PotionCooldown;
 
         [Header("Panels")]
         public CharacterSheet CharSheet;
+        public GameOverPanel GameOver;
 
         [Header("Item switching")]
         public GameObject ItemPrompt;
         public ItemComparePanel ItemComparePanel;
         public WeaponComparePanel SwitchWeaponDialog;
 
+        [Header("Messages")]
+        public GameObject LevelUpButton;
+
         List<Pickup> pickupPrompts = new List<Pickup>();
         Pickup pickupPromptDisplayed = null;
+
+        public bool IsGUIOpen()
+        {
+            return (CharSheet.gameObject.activeSelf || ItemComparePanel.gameObject.activeSelf);
+        }
 
         void Start()
         {
@@ -50,6 +61,11 @@ namespace RPG
                 WeaponImage.sprite = Player.Weapon.Data.Icon;
                 WeaponCooldown.fillAmount = 1f - Player.Weapon.GetCooldownPercent();
             }
+            if (Player.Potion.Data != null)
+            {
+                PotionImage.sprite = Player.Potion.Data.Icon;
+                PotionCooldown.fillAmount = 1f - Player.Potion.GetCooldownPercent();
+            }
 
             // Displaying prompt
             if ((pickupPrompts.Count > 0) && (pickupPromptDisplayed == null))
@@ -64,9 +80,16 @@ namespace RPG
             }
         }
 
+        public void LevelUp()
+        {
+            LevelUpButton.SetActive(true);
+        }
+
         public void ToggleCharSheet()
         {
             CharSheet.Toggle();
+            if (CharSheet.gameObject.activeSelf)
+                LevelUpButton.SetActive(false);
         }
 
         // Sent by an Item
@@ -110,6 +133,13 @@ namespace RPG
                     ShowArmorComparison(armor);
                     return;
                 }
+
+                PotionData potion = pickupPromptDisplayed.Item as PotionData;
+                if (potion != null)
+                {
+                    ShowPotionComparison(potion);
+                    return;
+                }
             }
         }
 
@@ -140,7 +170,32 @@ namespace RPG
                 new ItemComparePanel.StatBlock("DR", armor.DR, Player.Armor.DR)
             );
         }
-        
+        private void ShowPotionComparison(PotionData potion)
+        {
+            ItemComparePanel.gameObject.SetActive(true);
+
+            if (Player.Potion.Data == null)
+            {
+                ItemComparePanel.SetItems(potion, Player.Potion.Data,
+                    new ItemComparePanel.StatBlock("HP", potion.HealthAdd, ""),
+                    new ItemComparePanel.StatBlock("HP Percent", Mathf.RoundToInt(potion.HealthPercent * 100) + "%", ""),
+                    new ItemComparePanel.StatBlock("Mana", potion.ManaAdd, ""),
+                    new ItemComparePanel.StatBlock("Mana Percent", Mathf.RoundToInt(potion.ManaPercent * 100) + "%", ""),
+                    new ItemComparePanel.StatBlock("Cooldown", potion.Cooldown, "")
+                );
+            }
+            else
+            {
+                ItemComparePanel.SetItems(potion, Player.Potion.Data,
+                    new ItemComparePanel.StatBlock("HP", potion.HealthAdd, Player.Potion.Data.HealthAdd),
+                    new ItemComparePanel.StatBlock("HP Percent", Mathf.RoundToInt(potion.HealthPercent * 100) + "%", Mathf.RoundToInt(Player.Potion.Data.HealthPercent * 100) + "%"),
+                    new ItemComparePanel.StatBlock("Mana", potion.ManaAdd, Player.Potion.Data.ManaAdd),
+                    new ItemComparePanel.StatBlock("Mana Percent", Mathf.RoundToInt(potion.ManaPercent * 100) + "%", Mathf.RoundToInt(Player.Potion.Data.ManaPercent * 100) + "%"),
+                    new ItemComparePanel.StatBlock("Cooldown", potion.Cooldown, Player.Potion.Data.Cooldown)
+                );
+            }
+        }
+
         public void AcceptPickup()
         {
             HideComparison();
@@ -148,40 +203,43 @@ namespace RPG
             WeaponData weapon = pickupPromptDisplayed.Item as WeaponData;
             if (weapon != null)
             {
-                WeaponData tmp = Player.Weapon.Data;
-
-                // TODO: Also change mesh!
-                Player.Weapon.Data = weapon;
-
-                // If player's default weapon, destroy the pickup
-                if (tmp == Player.DefaultWeapon)
-                {
-                    Destroy(pickupPromptDisplayed.gameObject);
-                }
-                // Change contents otherwise
-                else
-                {
-                    // TODO: Also change mesh!
-                    pickupPromptDisplayed.Item = tmp;
-                }
-
+                Player.Weapon.Data = (WeaponData)ExchangePickupItem(Player.Weapon.Data);
+                
                 return;
             }
 
             ArmorData armor = pickupPromptDisplayed.Item as ArmorData;
             if (armor != null)
             {
-                ArmorData tmp = Player.Armor;
+                Player.SetArmor((ArmorData)ExchangePickupItem(Player.Armor));
+            }
 
-                Player.SetArmor(armor);
-
-                // TODO: Also change mesh!
-                pickupPromptDisplayed.Item = tmp;
+            PotionData potion = pickupPromptDisplayed.Item as PotionData;
+            if (potion != null)
+            {
+                Player.SetPotion((PotionData)ExchangePickupItem(Player.Potion.Data));
             }
         }
         public void CancelPickup()
         {
             HideComparison();
+        }
+
+        private Item ExchangePickupItem(Item oldItem)
+        {
+            Item result = pickupPromptDisplayed.Item;
+
+            if (oldItem != null)
+            {
+                // TODO: Also change mesh!
+                pickupPromptDisplayed.Item = oldItem;
+            }
+            else
+            {
+                Destroy(pickupPromptDisplayed.gameObject);
+            }
+
+            return result;
         }
     }
 }

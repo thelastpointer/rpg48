@@ -40,6 +40,11 @@ namespace RPG.Inventory
 
             return ProjectileRange;
         }
+
+        public float DamagePerSec()
+        {
+            return Damage * Cooldown;
+        }
     }
 
     public enum WeaponType

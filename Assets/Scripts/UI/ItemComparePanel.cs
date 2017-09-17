@@ -28,12 +28,22 @@ namespace RPG.UI
         {
             // Static stuff
             ItemName1.text = newItem.Name;
-            ItemName2.text = oldItem.Name;
             Description1.text = newItem.Description;
-            Description2.text = oldItem.Description;
             Icon1.sprite = newItem.Icon;
-            Icon2.sprite = oldItem.Icon;
 
+            if (oldItem != null)
+            {
+                ItemName2.text = oldItem.Name;
+                Description2.text = oldItem.Description;
+                Icon2.sprite = oldItem.Icon;
+            }
+            else
+            {
+                ItemName2.text = "Nothing";
+                Description2.text = "";
+                Icon2.sprite = null;
+            }
+            
             // Dynamic stuff
             foreach (StatBlock stat in stats)
             {

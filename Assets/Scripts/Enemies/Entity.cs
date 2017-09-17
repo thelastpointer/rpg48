@@ -52,5 +52,15 @@ namespace RPG
         {
             Mana = Mathf.Min(Mana + amount, MaxMana);
         }
+
+        public virtual void AddHealthPercent(float percent)
+        {
+            Health = Mathf.Min(Health + MaxHealth * percent, MaxHealth);
+        }
+
+        public virtual void AddManaPercent(float percent)
+        {
+            Mana = Mathf.Min(Mana + MaxMana * percent, MaxMana);
+        }
     }
 }

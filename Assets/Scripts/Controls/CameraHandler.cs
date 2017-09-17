@@ -11,7 +11,8 @@ namespace RPG
 
         private void LateUpdate()
         {
-            transform.position = Target.position;
+            if (Target != null)
+                transform.position = Target.position;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace RPG.UI
 
         public Text LevelLabel;
         public Slider XPSlider;
+        public Text XPLabel;
         public Text StrLabel;
         public Text DexLabel;
         public Text ConLabel;
@@ -27,9 +28,10 @@ namespace RPG.UI
         {
             // Level & XP
             LevelLabel.text = "Level " + Target.Level;
-            XPSlider.minValue = PlayerCharacter.GetMinXPForLevel(Target.Level);
-            XPSlider.maxValue = PlayerCharacter.GetMaxXPForLevel(Target.Level);
+            XPSlider.minValue = XPTable.GetMinXPForLevel(Target.Level);
+            XPSlider.maxValue = XPTable.GetMaxXPForLevel(Target.Level);
             XPSlider.value = Target.XP;
+            XPLabel.text = string.Format("{0}/{1}", Target.XP, XPTable.GetMaxXPForLevel(Target.Level));
 
             // Attributes
             StrLabel.text = Target.Strength.ToString();
@@ -39,11 +41,14 @@ namespace RPG.UI
             IntLabel.text = Target.Intelligence.ToString();
 
             // Icons
+            WeaponIcon.sprite = Target.Weapon.Data?.Icon;
+            ArmorIcon.sprite = Target.Armor?.Icon;
+
             WeaponIcon.sprite = Target.Weapon.Data ? Target.Weapon.Data.Icon : null;
             ArmorIcon.sprite = Target.Armor ? Target.Armor.Icon : null;
             //MaskIcon.sprite = 
             //RingIcon.sprite = 
-            PotionIcon.sprite = Target.Potion ? Target.Potion.Icon : null;
+            PotionIcon.sprite = Target.Potion.Data ? Target.Potion.Data.Icon : null;
 
             gameObject.SetActive(true);
         }
