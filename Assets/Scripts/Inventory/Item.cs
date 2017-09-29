@@ -6,6 +6,7 @@ namespace RPG.Inventory
     {
         [Header("Description")]
         public string Name;
+
         [Multiline]
         public string Description;
         public Sprite Icon;

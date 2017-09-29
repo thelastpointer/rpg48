@@ -7,7 +7,7 @@ using RPG.Inventory;
 
 namespace RPG
 {
-    public class WeaponInstance : CooldownAbility
+    public class WeaponUseAbility : CooldownAbility
     {
         public WeaponData Data;
 

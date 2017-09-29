@@ -15,7 +15,7 @@ namespace RPG
 
         public delegate void DamageFunction(Entity target, Entity attacker);
 
-        public void Initialize(Vector3 position, Vector3 direction, WeaponInstance parentWeapon, Entity attacker, DamageFunction func)
+        public void Initialize(Vector3 position, Vector3 direction, WeaponUseAbility parentWeapon, Entity attacker, DamageFunction func)
         {
             tr.position = position;
             tr.rotation = Quaternion.LookRotation(direction);

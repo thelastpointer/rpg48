@@ -43,14 +43,7 @@ namespace RPG
             
             // Level up
             if (pc.XP >= XPTable.GetMaxXPForLevel(pc.Level))
-            {
-                ++pc.Level;
-
-                pc.Health = pc.MaxHealth;
-                pc.Mana = pc.MaxMana;
-
-                pc.HUD.LevelUp();
-            }
+                pc.LevelUp();
         }
 
         public void QuitToMenu()

@@ -2,7 +2,7 @@
 
 namespace RPG
 {
-    public class PotionAbility : CooldownAbility
+    public class PotionUseAbility : CooldownAbility
     {
         public Inventory.PotionData Data;
 

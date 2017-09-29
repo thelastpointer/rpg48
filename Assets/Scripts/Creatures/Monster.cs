@@ -24,7 +24,7 @@ namespace RPG
         Transform tr;
         CharacterController controller;
         Entity target;
-        WeaponInstance weapon = new WeaponInstance();
+        WeaponUseAbility weapon = new WeaponUseAbility();
         Vector3 movement;
         bool changedFactions = false;
 

@@ -4,6 +4,7 @@
 
 using RPG.Inventory;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG
@@ -29,22 +30,26 @@ namespace RPG
         //unlocked spells
         //selected spell
         
-        public WeaponInstance Weapon { get { return weaponInstance; } }
+        public WeaponUseAbility Weapon { get { return weaponInstance; } }
         public ArmorData Armor { get { return armor; } }
-        public PotionAbility Potion { get { return potion; } }
+        public PotionUseAbility Potion { get { return potion; } }
 
         [HideInInspector]
         public int Level = 1;
         [HideInInspector]
         public int XP;
+
+        int abilityPoints;
         
         private Transform tr;
         private CharacterController controller;
         private Vector3 move;
-        private WeaponInstance weaponInstance = new WeaponInstance();
-        private WeaponInstance selectedSpell = new WeaponInstance();
-        private PotionAbility potion = new PotionAbility();
+        private WeaponUseAbility weaponInstance = new WeaponUseAbility();
+        private WeaponUseAbility selectedSpell = new WeaponUseAbility();
+        private PotionUseAbility potion = new PotionUseAbility();
         private ArmorData armor;
+
+        private List<Item> inventory = new List<Item>();
 
         protected override float AdjustIncomingDamage(float baseDamage)
         {
@@ -102,7 +107,15 @@ namespace RPG
             }
 
             if (Input.GetKeyDown(KeyCode.C))
-                HUD.ToggleCharSheet();
+                HUD.ToggleCharSheet(this);
+        }
+
+        void FixedUpdate()
+        {
+            tr.rotation = Controls.GetRotation();
+
+            Vector3 fullMove = move + Physics.gravity;
+            controller.Move(fullMove * Time.deltaTime);
         }
 
         public void SetArmor(ArmorData a)
@@ -115,12 +128,27 @@ namespace RPG
             potion.Data = p;
         }
 
-        void FixedUpdate()
+        public void LevelUp()
         {
-            tr.rotation = Controls.GetRotation();
+            ++abilityPoints;
+            ++Level;
 
-            Vector3 fullMove = move + Physics.gravity;
-            controller.Move(fullMove * Time.deltaTime);
+            MaxHealth = 90 + Level * Constitution;
+
+            Health = MaxHealth;
+            Mana = MaxMana;
+
+            HUD.LevelUp();
+        }
+
+        public int UseAbilityPoint()
+        {
+            --abilityPoints;
+
+            if (abilityPoints < 0)
+                abilityPoints = 0;
+
+            return abilityPoints;
         }
     }
 }

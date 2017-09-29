@@ -24,12 +24,12 @@ namespace RPG
 
         [Header("Panels")]
         public CharacterSheet CharSheet;
+        public LevelUpPanel LevelUpPanel;
         public GameOverPanel GameOver;
 
         [Header("Item switching")]
         public GameObject ItemPrompt;
         public ItemComparePanel ItemComparePanel;
-        public WeaponComparePanel SwitchWeaponDialog;
 
         [Header("Messages")]
         public GameObject LevelUpButton;
@@ -39,7 +39,7 @@ namespace RPG
 
         public bool IsGUIOpen()
         {
-            return (CharSheet.gameObject.activeSelf || ItemComparePanel.gameObject.activeSelf);
+            return (CharSheet.gameObject.activeSelf || LevelUpPanel.gameObject.activeSelf || ItemComparePanel.gameObject.activeSelf);
         }
 
         void Start()
@@ -85,11 +85,19 @@ namespace RPG
             LevelUpButton.SetActive(true);
         }
 
-        public void ToggleCharSheet()
+        public void ToggleCharSheet(PlayerCharacter pc)
         {
-            CharSheet.Toggle();
-            if (CharSheet.gameObject.activeSelf)
+            if (LevelUpButton.activeSelf)
+            {
                 LevelUpButton.SetActive(false);
+                LevelUpPanel.Show(pc);
+            }
+            else
+            {
+                CharSheet.Toggle();
+                if (CharSheet.gameObject.activeSelf)
+                    LevelUpButton.SetActive(false);
+            }
         }
 
         // Sent by an Item
